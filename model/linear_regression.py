@@ -18,21 +18,24 @@ class LinearRegression:
             raise TypeError("X and y should be numpy arrays")
 
         n_samples, n_features = X.shape
-        # Initialize the weights randomly between -1 and 1
-        self.weights: np.ndarray = np.random.uniform(-1.0, 1.0, n_features)
-        # Initialize bias to a value of 0
-        self.bias = 0
 
+        self.weights = np.random.uniform(
+            -1.0, 1.0, n_features
+        )  # Initialize the weights randomly between -1 and 1
+        self.bias = 0  # Initialize bias to a value of 0
+
+        # X.shape: [n, f], X.T.shape: [f, n]
+        # y.shape: [n,]
         # Gradient Descent
         for _ in range(self.n_iters):
-            # Get the predictions
-            y_predicted = self.predict(X)
+            y_predicted = self.predict(X)  # Make predictions using current weights
             dw = (1 / n_samples) * np.dot(X.T, (y_predicted - y))
             db = (1 / n_samples) * np.sum(y_predicted - y)
 
+            # Update the parameters
             self.weights -= self.lr * dw
             self.bias -= self.lr * db
 
-    def predict(self, X):
+    def predict(self, X: np.ndarray):
         """Predict the output for the given data"""
         return np.dot(X, self.weights) + self.bias
